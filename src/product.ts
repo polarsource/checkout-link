@@ -30,9 +30,7 @@ export const createProduct = async (
 				size: fs.statSync(absoluteFilePath).size,
 				readStream,
 			},
-			onFileUploadProgress: (file, uploaded) => {
-				console.log(`Uploaded ${uploaded} bytes of ${file.size}`);
-			},
+			onFileUploadProgress: () => {},
 			onFileUploaded: resolve,
 		});
 

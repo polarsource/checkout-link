@@ -6,8 +6,8 @@ export const serverPrompt = async () => {
 		name: "server",
 		message: "Server",
 		choices: [
-			{ title: "Production", value: "production" },
 			{ title: "Sandbox", value: "sandbox" },
+			{ title: "Production", value: "production" },
 		],
 	});
 
