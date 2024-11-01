@@ -7,6 +7,7 @@ import { createProduct } from "./product.js";
 import { productPrompt } from "./prompts/product.js";
 import { authenticationMessage } from "./ui/authentication.js";
 import { successMessage } from "./ui/success.js";
+import { serverPrompt } from "./prompts/server.js";
 
 process.on("uncaughtException", (error) => {
 	console.error(error);
@@ -22,9 +23,6 @@ const cli = meow(
 	`
 	Usage
 	  $ checkout-link
-	
-	Options
-	  --sandbox, -s  Use the sandbox environment.
 `,
 	{
 		importMeta: import.meta,
@@ -42,9 +40,10 @@ const [filePath] = cli.input;
 
 (async () => {
 	const product = await productPrompt();
+	const server = await serverPrompt();
 
 	await authenticationMessage();
-	const code = await login(cli.flags.sandbox ? "sandbox" : "production");
+	const code = await login(server);
 
 	const api = new Polar({
 		accessToken: code,
