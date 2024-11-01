@@ -5,9 +5,9 @@ import { login } from "./oauth.js";
 import { resolveOrganization } from "./organization.js";
 import { createProduct } from "./product.js";
 import { productPrompt } from "./prompts/product.js";
+import { serverPrompt } from "./prompts/server.js";
 import { authenticationMessage } from "./ui/authentication.js";
 import { successMessage } from "./ui/success.js";
-import { serverPrompt } from "./prompts/server.js";
 
 process.on("uncaughtException", (error) => {
 	console.error(error);
