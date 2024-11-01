@@ -22,10 +22,10 @@ const config = {
 		"profile",
 		"email",
 		"user:read",
-		"organizations:read", 
+		"organizations:read",
 		"organizations:write",
 		"checkout_links:read",
-		"checkout_links:write", 
+		"checkout_links:write",
 		"checkouts:read",
 		"checkouts:write",
 		"products:read",
@@ -36,7 +36,7 @@ const config = {
 		"files:write",
 		"subscriptions:read",
 		"subscriptions:write",
-		"user:downloadables:read"
+		"user:downloadables:read",
 	],
 	redirectUrl: "http://127.0.0.1:3333/oauth/callback",
 };

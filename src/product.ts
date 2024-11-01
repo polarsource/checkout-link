@@ -21,7 +21,7 @@ export const createProduct = async (
 	const readStream = fs.createReadStream(absoluteFilePath);
 	const mimeType = mime.lookup(absoluteFilePath) || "application/octet-stream";
 
-	const fileUpload = await new Promise<FileRead>(async (resolve) => {
+	const fileUpload = await new Promise<FileRead>((resolve) => {
 		const upload = new Upload(api, {
 			organization,
 			file: {
@@ -35,9 +35,9 @@ export const createProduct = async (
 			},
 			onFileUploaded: resolve,
 		});
-	
-		await upload.run();
-	})
+
+		upload.run();
+	});
 
 	const benefit = await api.benefits.create({
 		type: "downloadables",

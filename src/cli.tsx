@@ -1,5 +1,6 @@
 import { Polar } from "@polar-sh/sdk";
 import meow from "meow";
+import { createCheckoutLink } from "./checkout.js";
 import { login } from "./oauth.js";
 import { resolveOrganization } from "./organization.js";
 import { createProduct } from "./product.js";
@@ -30,7 +31,7 @@ const cli = meow(
 		flags: {
 			sandbox: {
 				type: "boolean",
-				alias: 's',
+				alias: "s",
 				default: false,
 			},
 		},
@@ -47,7 +48,7 @@ const [filePath] = cli.input;
 
 	const api = new Polar({
 		accessToken: code,
-		server: cli.flags.sandbox ? 'sandbox' : 'production'
+		server: cli.flags.sandbox ? "sandbox" : "production",
 	});
 
 	const organization = await resolveOrganization(api);
@@ -59,5 +60,11 @@ const [filePath] = cli.input;
 		filePath,
 	);
 
-	successMessage(organization, createdProduct);
+	const price = createdProduct.prices[0];
+
+	if (price) {
+		const checkoutLink = await createCheckoutLink(api, price);
+
+		successMessage(createdProduct, checkoutLink);
+	}
 })();

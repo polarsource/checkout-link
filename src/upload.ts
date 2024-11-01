@@ -158,38 +158,35 @@ export class Upload {
 		const data = this.buffer.slice(part.chunkStart, part.chunkEnd);
 		const blob = new Blob([data], { type: "application/octet-stream" });
 
-		return new Promise(async (resolve, reject) => {
-			const controller = new AbortController();
-			const signal = controller.signal;
+		const controller = new AbortController();
+		const signal = controller.signal;
 
-			const response = await fetch(part.url, {
-				method: 'PUT',
-				headers: part.headers || {},
-				body: blob,
-				signal,
-			});
-
-			if (!response.ok) {
-				reject(new Error("Failed to upload part"));
-				return;
-			}
-
-			const etag = response.headers.get("ETag");
-			if (!etag) {
-				reject(new Error("ETag not found in response"));
-				return;
-			}
-
-			const completed: S3FileUploadCompletedPart = {
-				number: part.number,
-				checksumEtag: etag,
-				checksumSha256Base64: part.checksumSha256Base64 || null,
-			};
-
-			onProgress(part.chunkEnd - part.chunkStart);
-
-			resolve(completed);
+		const response = await fetch(part.url, {
+			method: "PUT",
+			headers: part.headers || {},
+			body: blob,
+			signal,
 		});
+
+		if (!response.ok) {
+			throw new Error("Failed to upload part");
+		}
+
+		const etag = response.headers.get("ETag");
+
+		if (!etag) {
+			throw new Error("ETag not found in response");
+		}
+
+		const completed: S3FileUploadCompletedPart = {
+			number: part.number,
+			checksumEtag: etag,
+			checksumSha256Base64: part.checksumSha256Base64 || null,
+		};
+
+		onProgress(part.chunkEnd - part.chunkStart);
+
+		return completed;
 	}
 
 	async complete(
