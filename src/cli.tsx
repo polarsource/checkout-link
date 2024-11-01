@@ -47,7 +47,7 @@ const [filePath] = cli.input;
 
 	const api = new Polar({
 		accessToken: code,
-		server: cli.flags.sandbox ? "sandbox" : "production",
+		server
 	});
 
 	const organization = await resolveOrganization(api);
