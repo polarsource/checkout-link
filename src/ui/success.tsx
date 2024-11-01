@@ -1,10 +1,10 @@
 import { StatusMessage } from "@inkjs/ui";
 import type { CheckoutLink } from "@polar-sh/sdk/models/components/checkoutlink.js";
 import type { Product } from "@polar-sh/sdk/models/components/product.js";
-import { Box, Text, render } from "ink";
-import React from "react";
-import open from "open";
 import spawn from "cross-spawn";
+import { Box, Text, render } from "ink";
+import open from "open";
+import React from "react";
 
 function pbcopy(data: string) {
 	const proc = spawn("pbcopy");
@@ -25,7 +25,7 @@ export const successMessage = (
 			<StatusMessage variant="success">
 				<Text>Checkout URL copied to clipboard!</Text>
 			</StatusMessage>
-		</Box>
+		</Box>,
 	);
 
 	open(checkoutLink.url);
