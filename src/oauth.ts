@@ -8,7 +8,7 @@ import {
 import open from "open";
 
 const config = {
-	clientId: "polar_ci_5_49aheFVUaNbjr8saQNDw",
+	clientId: "polar_ci_K3RqUDorEDZ3To8rwbvVQQ",
 	clientSecret: "",
 	scopes: [
 		"openid",

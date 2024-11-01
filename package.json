@@ -1,6 +1,6 @@
 {
-	"name": "payment-link",
-	"version": "0.2.0",
+	"name": "checkout-link",
+	"version": "0.1.0",
 	"license": "Apache-2.0",
 	"bin": "bin/cli.js",
 	"type": "module",
