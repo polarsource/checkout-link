@@ -7,27 +7,37 @@ import {
 } from "node:http";
 import open from "open";
 
+const SANDBOX_CLIENT_ID = "polar_ci_NT_cEhnUzs7J3oRMnpCqaA";
+const PRODUCTION_CLIENT_ID = "polar_ci_K3RqUDorEDZ3To8rwbvVQQ";
+
+const SANDBOX_AUTHORIZATION_URL = "https://sandbox.polar.sh/oauth2/authorize";
+const PRODUCTION_AUTHORIZATION_URL = "https://polar.sh/oauth2/authorize";
+
+const SANDBOX_TOKEN_URL = "https://sandbox-api.polar.sh/v1/oauth2/token";
+const PRODUCTION_TOKEN_URL = "https://api.polar.sh/v1/oauth2/token";
+
 const config = {
-	clientId: "polar_ci_K3RqUDorEDZ3To8rwbvVQQ",
-	clientSecret: "",
 	scopes: [
 		"openid",
 		"profile",
 		"email",
 		"user:read",
-		"organizations:read",
+		"organizations:read", 
 		"organizations:write",
+		"checkout_links:read",
+		"checkout_links:write", 
+		"checkouts:read",
+		"checkouts:write",
 		"products:read",
 		"products:write",
 		"benefits:read",
 		"benefits:write",
+		"files:read",
+		"files:write",
 		"subscriptions:read",
 		"subscriptions:write",
+		"user:downloadables:read"
 	],
-	endpoint: {
-		authorization: "https://sandbox.polar.sh/oauth2/authorize",
-		token: "https://sandbox-api.polar.sh/v1/oauth2/token",
-	},
 	redirectUrl: "http://127.0.0.1:3333/oauth/callback",
 };
 
@@ -40,12 +50,12 @@ const generateHash = (value: string) => {
 	return hash.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 };
 
-export async function login(): Promise<string> {
+export async function login(mode: "production" | "sandbox"): Promise<string> {
 	// Set up the authorization request
 	const codeVerifier = generateRandomString();
 	const codeChallenge = generateHash(codeVerifier);
 	const state = generateRandomString();
-	const authorizationUrl = buildAuthorizationUrl(state, codeChallenge);
+	const authorizationUrl = buildAuthorizationUrl(mode, state, codeChallenge);
 	const loopbackPort = 3333;
 
 	return new Promise<string>((resolve, reject) => {
@@ -64,6 +74,7 @@ export async function login(): Promise<string> {
 				try {
 					// Swap the code for tokens
 					const accessToken = await redeemCodeForAccessToken(
+						mode,
 						request.url ?? "",
 						state,
 						codeVerifier,
@@ -87,9 +98,18 @@ export async function login(): Promise<string> {
 /*
  * Build a code flow URL for a native console app
  */
-function buildAuthorizationUrl(state: string, codeChallenge: string): string {
-	let url = config.endpoint.authorization;
-	url += `?client_id=${encodeURIComponent(config.clientId)}`;
+function buildAuthorizationUrl(
+	mode: "production" | "sandbox",
+	state: string,
+	codeChallenge: string,
+): string {
+	let url =
+		mode === "production"
+			? PRODUCTION_AUTHORIZATION_URL
+			: SANDBOX_AUTHORIZATION_URL;
+	url += `?client_id=${encodeURIComponent(
+		mode === "production" ? PRODUCTION_CLIENT_ID : SANDBOX_CLIENT_ID,
+	)}`;
 	url += `&redirect_uri=${encodeURIComponent(config.redirectUrl)}`;
 	url += "&response_type=code";
 	url += `&scope=${encodeURIComponent(config.scopes.join(" "))}`;
@@ -117,6 +137,7 @@ function getLoginResult(responseUrl: string): [string, string] {
  * Swap the code for tokens using PKCE and return the access token
  */
 async function redeemCodeForAccessToken(
+	mode: "production" | "sandbox",
 	responseUrl: string,
 	requestState: string,
 	codeVerifier: string,
@@ -128,18 +149,23 @@ async function redeemCodeForAccessToken(
 	}
 
 	let body = "grant_type=authorization_code";
-	body += `&client_id=${encodeURIComponent(config.clientId)}`;
+	body += `&client_id=${encodeURIComponent(
+		mode === "production" ? PRODUCTION_CLIENT_ID : SANDBOX_CLIENT_ID,
+	)}`;
 	body += `&redirect_uri=${encodeURIComponent(config.redirectUrl)}`;
 	body += `&code=${encodeURIComponent(code)}`;
 	body += `&code_verifier=${encodeURIComponent(codeVerifier)}`;
 
-	const response = await fetch(config.endpoint.token, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded",
+	const response = await fetch(
+		mode === "production" ? PRODUCTION_TOKEN_URL : SANDBOX_TOKEN_URL,
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			},
+			body,
 		},
-		body,
-	});
+	);
 
 	if (response.status >= 400) {
 		const details = await response.text();

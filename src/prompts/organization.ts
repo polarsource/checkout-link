@@ -16,7 +16,6 @@ export const createOrganizationPrompt = async (organizationSlug?: string) => {
 
 export const selectOrganizationPrompt = async (
 	organizations: Organization[],
-	matchingOrg?: Organization,
 ): Promise<Organization | undefined> => {
 	const { organization: orgSlug } = await prompts({
 		type: "select",
@@ -32,7 +31,6 @@ export const selectOrganizationPrompt = async (
 				value: undefined,
 			},
 		],
-		initial: matchingOrg ? organizations.indexOf(matchingOrg) : 0,
 	});
 
 	return organizations.find((org) => org.slug === orgSlug);

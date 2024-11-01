@@ -1,34 +1,59 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { Polar } from "@polar-sh/sdk";
-import type { Organization } from "@polar-sh/sdk/models/components";
+import type { FileRead, Organization } from "@polar-sh/sdk/models/components";
 import type { ProductsCreateProductCreate } from "@polar-sh/sdk/models/operations";
-import type { benefitPrompt } from "./prompts/benefit.js";
+import mime from "mime-types";
+import { Upload } from "./upload.js";
 
 export const createProduct = async (
 	api: Polar,
 	organization: Organization,
 	productCreate: ProductsCreateProductCreate,
-	benefit: Awaited<ReturnType<typeof benefitPrompt>>,
+	filePath?: string,
 ) => {
 	const product = await api.products.create({
 		...productCreate,
 		organizationId: organization.id,
 	});
 
-	if (benefit.licenseKey) {
-		const benefit = await api.benefits.create({
-			type: "license_keys",
-			description: "License Key",
-			properties: {},
-			organizationId: organization.id,
-		});
+	const absoluteFilePath = path.resolve(process.cwd(), filePath ?? "");
+	const readStream = fs.createReadStream(absoluteFilePath);
+	const mimeType = mime.lookup(absoluteFilePath) || "application/octet-stream";
 
-		await api.products.updateBenefits({
-			id: product.id,
-			productBenefitsUpdate: {
-				benefits: [benefit.id],
+	const fileUpload = await new Promise<FileRead>(async (resolve) => {
+		const upload = new Upload(api, {
+			organization,
+			file: {
+				name: path.basename(absoluteFilePath),
+				type: mimeType,
+				size: fs.statSync(absoluteFilePath).size,
+				readStream,
 			},
+			onFileUploadProgress: (file, uploaded) => {
+				console.log(`Uploaded ${uploaded} bytes of ${file.size}`);
+			},
+			onFileUploaded: resolve,
 		});
-	}
+	
+		await upload.run();
+	})
+
+	const benefit = await api.benefits.create({
+		type: "downloadables",
+		description: productCreate.name,
+		properties: {
+			files: [fileUpload.id],
+		},
+		organizationId: organization.id,
+	});
+
+	await api.products.updateBenefits({
+		id: product.id,
+		productBenefitsUpdate: {
+			benefits: [benefit.id],
+		},
+	});
 
 	return product;
 };

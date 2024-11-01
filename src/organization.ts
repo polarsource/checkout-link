@@ -7,7 +7,6 @@ import {
 
 export const resolveOrganization = async (
 	api: Polar,
-	slug: string,
 ): Promise<Organization> => {
 	// Get list of organizations user is member of
 	const userOrganizations = (
@@ -16,37 +15,16 @@ export const resolveOrganization = async (
 		})
 	).result.items;
 
-	// Find organization matching slug if it exists
-	const matchingOrg = userOrganizations.find((org) => org.slug === slug);
-
 	if (userOrganizations.length > 0) {
 		// If user has organizations, prompt them to select one
-		const organization = await selectOrganizationPrompt(
-			userOrganizations,
-			matchingOrg,
-		);
+		const organization = await selectOrganizationPrompt(userOrganizations);
 
 		if (organization) {
 			return organization;
 		}
 	}
 
-	const orgsWithSlug = await api.organizations.list({
-		slug,
-	});
-
-	const orgExists = orgsWithSlug.result.items.length > 0;
-
-	if (orgExists) {
-		const newSlug = await createOrganizationPrompt();
-
-		return await api.organizations.create({
-			name: newSlug,
-			slug: newSlug,
-		});
-	}
-
-	const newSlug = await createOrganizationPrompt(slug);
+	const newSlug = await createOrganizationPrompt();
 
 	return await api.organizations.create({
 		name: newSlug,

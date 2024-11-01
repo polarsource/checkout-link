@@ -32,6 +32,9 @@ importers:
       meow:
         specifier: ^11.0.0
         version: 11.0.0
+      mime-types:
+        specifier: ^2.1.35
+        version: 2.1.35
       next:
         specifier: ^15.0.1
         version: 15.0.1(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -66,6 +69,9 @@ importers:
       '@types/listr':
         specifier: ^0.14.9
         version: 0.14.9
+      '@types/mime-types':
+        specifier: ^2.1.4
+        version: 2.1.4
       '@types/prompts':
         specifier: ^2.4.9
         version: 2.4.9
@@ -1375,6 +1381,9 @@ packages:
 
   '@types/listr@0.14.9':
     resolution: {integrity: sha512-Ncsy/jtO/HZYrupLGcnp1BOswZVsNvggjIjnf2EZ1xECfU4hxcQ3FWvFEyR+/DXssz0HDm74Op/tEsyrB3eV5w==}
+
+  '@types/mime-types@2.1.4':
+    resolution: {integrity: sha512-lfU4b34HOri+kAY5UheuFMWPDOI+OPceBSHZKp69gEyTL/mmJ4cnU6Y/rlme3UL3GyOn6Y42hyIEw0/q8sWx5w==}
 
   '@types/minimist@1.2.5':
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
@@ -6846,6 +6855,8 @@ snapshots:
     dependencies:
       '@types/node': 22.7.8
       rxjs: 6.6.7
+
+  '@types/mime-types@2.1.4': {}
 
   '@types/minimist@1.2.5': {}
 
