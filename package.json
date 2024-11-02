@@ -1,6 +1,6 @@
 {
 	"name": "checkout-link",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"license": "Apache-2.0",
 	"bin": "bin/cli.js",
 	"type": "module",
@@ -13,10 +13,7 @@
 		"test": "prettier --check . && xo && ava",
 		"check": "biome check --write ./src"
 	},
-	"files": [
-		"dist",
-		"bin"
-	],
+	"files": ["dist", "bin"],
 	"dependencies": {
 		"@inkjs/ui": "^2.0.0",
 		"@polar-sh/sdk": "^0.13.3",
@@ -24,22 +21,15 @@
 		"cross-spawn": "^7.0.3",
 		"ink": "^4.4.1",
 		"ink-link": "^4.1.0",
-		"listr": "^0.14.3",
 		"meow": "^11.0.0",
 		"mime-types": "^2.1.35",
-		"next": "^15.0.1",
-		"nuxt": "^3.0.0",
 		"open": "^10.1.0",
 		"prompts": "^2.4.2",
-		"react": "^18.2.0",
-		"standardwebhooks": "1.0.0",
-		"tsup": "^8.3.0",
-		"zod": "^3.23.8"
+		"react": "^18.2.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@sindresorhus/tsconfig": "^3.0.1",
-		"@types/listr": "^0.14.9",
 		"@types/mime-types": "^2.1.4",
 		"@types/prompts": "^2.4.9",
 		"@types/react": "^18.3.11",
@@ -52,6 +42,7 @@
 		"ink-testing-library": "^3.0.0",
 		"prettier": "^2.8.7",
 		"ts-node": "^10.9.1",
+		"tsup": "^8.3.0",
 		"typescript": "^5.0.3",
 		"xo": "^0.53.1"
 	},
@@ -60,9 +51,7 @@
 			"ts": "module",
 			"tsx": "module"
 		},
-		"nodeArguments": [
-			"--loader=ts-node/esm"
-		]
+		"nodeArguments": ["--loader=ts-node/esm"]
 	},
 	"xo": {
 		"extends": "xo-react",
