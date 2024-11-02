@@ -40,6 +40,7 @@ const [filePath] = cli.input;
 
 (async () => {
 	const product = await productPrompt();
+	console.log(product);
 	const server = await serverPrompt();
 
 	await authenticationMessage();

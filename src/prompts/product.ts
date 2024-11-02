@@ -17,19 +17,19 @@ export const productPrompt = async () => {
 
 	const priceTypeResponse = await prompts({
 		type: "select",
-		name: "priceType",
+		name: "type",
 		message: "Product Type",
 		choices: [
-			{ title: "One-Time Purchase", value: "one-time" },
+			{ title: "One-Time Purchase", value: "one_time" },
 			{ title: "Subscription", value: "recurring" },
 		],
 	});
 
-	if (priceTypeResponse.priceType === "one-time") {
+	if (priceTypeResponse.type === "one_time") {
 		const priceResponse = await prompts([
 			{
 				type: "select",
-				name: "priceAmountType",
+				name: "amountType",
 				message: "Price Type",
 				choices: [
 					{ title: "Free", value: "free" },
@@ -46,7 +46,15 @@ export const productPrompt = async () => {
 
 		return {
 			...productResponse,
-			prices: [priceResponse],
+			prices: [
+				{
+					...priceResponse,
+					...priceTypeResponse,
+					...(typeof priceResponse.priceAmount === "number"
+						? { priceAmount: priceResponse.priceAmount * 100 }
+						: {}),
+				},
+			],
 		};
 	}
 
@@ -56,13 +64,13 @@ export const productPrompt = async () => {
 			name: "recurringInterval",
 			message: "Recurring Interval",
 			choices: [
-				{ title: "Monthly", value: "monthly" },
-				{ title: "Yearly", value: "yearly" },
+				{ title: "Monthly", value: "month" },
+				{ title: "Yearly", value: "year" },
 			],
 		},
 		{
 			type: "select",
-			name: "priceAmountType",
+			name: "amountType",
 			message: "Price Type",
 			choices: [
 				{ title: "Free", value: "free" },
@@ -79,6 +87,14 @@ export const productPrompt = async () => {
 
 	return {
 		...productResponse,
-		prices: [priceResponse],
+		prices: [
+			{
+				...priceResponse,
+				...priceTypeResponse,
+				...(typeof priceResponse.priceAmount === "number"
+					? { priceAmount: priceResponse.priceAmount * 100 }
+					: {}),
+			},
+		],
 	};
 };
