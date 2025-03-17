@@ -1,14 +1,12 @@
 import type { ReadStream } from "node:fs";
 import type { Polar } from "@polar-sh/sdk";
-import type {
-	FileRead,
-	FileUpload,
-	Organization,
-	S3FileCreatePart,
-	S3FileUploadCompletedPart,
-	S3FileUploadPart,
-} from "@polar-sh/sdk/models/components";
-import type { FilesCreateFileCreate } from "@polar-sh/sdk/models/operations";
+import type { S3FileCreatePart } from "@polar-sh/sdk/models/components/s3filecreatepart.js";
+import type { Organization } from "@polar-sh/sdk/models/components/organization.js";
+import type { FileUpload } from "@polar-sh/sdk/models/components/fileupload.js";
+import type { FileRead } from "@polar-sh/sdk/models/components/listresourcefileread.js";
+import type { S3FileUploadCompletedPart } from "@polar-sh/sdk/models/components/s3fileuploadcompletedpart.js";
+import type { S3FileUploadPart } from "@polar-sh/sdk/models/components/s3fileuploadpart.js";
+import type { FileCreate } from "@polar-sh/sdk/models/components/filecreate.js";
 
 const CHUNK_SIZE = 10000000; // 10MB
 
@@ -35,7 +33,7 @@ export class Upload {
 	};
 	onFileUploadProgress: (file: FileUpload, uploaded: number) => void;
 	onFileUploaded: (response: FileRead) => void;
-	private buffer: Buffer;
+	private buffer: ArrayBuffer;
 
 	constructor(
 		api: Polar,
@@ -51,7 +49,7 @@ export class Upload {
 		this.file = file;
 		this.onFileUploadProgress = onFileUploadProgress;
 		this.onFileUploaded = onFileUploaded;
-		this.buffer = Buffer.alloc(0);
+		this.buffer = new ArrayBuffer(0);
 	}
 
 	private async prepare() {
@@ -59,7 +57,7 @@ export class Upload {
 		for await (const chunk of this.file.readStream) {
 			chunks.push(chunk);
 		}
-		this.buffer = Buffer.concat(chunks);
+		this.buffer = Buffer.concat(chunks).buffer;
 	}
 
 	async getSha256Base64(buffer: ArrayBuffer) {
@@ -74,7 +72,7 @@ export class Upload {
 		const parts = await this.getMultiparts();
 		const mimeType = this.file.type ?? "application/octet-stream";
 
-		const params: FilesCreateFileCreate = {
+		const params: FileCreate = {
 			organizationId: this.organization.id,
 			service: "downloadable",
 			name: this.file.name,

@@ -11,7 +11,7 @@ export const resolveOrganization = async (
 	// Get list of organizations user is member of
 	const userOrganizations = (
 		await api.organizations.list({
-			isMember: true,
+			limit: 100,
 		})
 	).result.items;
 

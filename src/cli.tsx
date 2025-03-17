@@ -59,10 +59,8 @@ const [filePath] = cli.input;
 		filePath,
 	);
 
-	const price = createdProduct.prices[0];
-
-	if (price) {
-		const checkoutLink = await createCheckoutLink(api, price);
+	if (createdProduct) {
+		const checkoutLink = await createCheckoutLink(api, createdProduct.id);
 
 		successMessage(createdProduct, checkoutLink);
 	}

@@ -1,8 +1,7 @@
 import type { Polar } from "@polar-sh/sdk";
-import type { ProductPrice } from "@polar-sh/sdk/models/components/productprice.js";
 
-export const createCheckoutLink = async (api: Polar, price: ProductPrice) => {
+export const createCheckoutLink = async (api: Polar, productId: string) => {
 	return await api.checkoutLinks.create({
-		productPriceId: price.id,
+		productId,
 	});
 };

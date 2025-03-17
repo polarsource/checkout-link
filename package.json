@@ -13,10 +13,13 @@
 		"test": "prettier --check . && xo && ava",
 		"check": "biome check --write ./src"
 	},
-	"files": ["dist", "bin"],
+	"files": [
+		"dist",
+		"bin"
+	],
 	"dependencies": {
 		"@inkjs/ui": "^2.0.0",
-		"@polar-sh/sdk": "^0.13.3",
+		"@polar-sh/sdk": "^0.31.0",
 		"@types/cross-spawn": "^6.0.6",
 		"cross-spawn": "^7.0.3",
 		"ink": "^4.4.1",
@@ -51,7 +54,9 @@
 			"ts": "module",
 			"tsx": "module"
 		},
-		"nodeArguments": ["--loader=ts-node/esm"]
+		"nodeArguments": [
+			"--loader=ts-node/esm"
+		]
 	},
 	"xo": {
 		"extends": "xo-react",
