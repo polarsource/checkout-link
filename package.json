@@ -18,7 +18,7 @@
 		"@inkjs/ui": "^2.0.0",
 		"@polar-sh/sdk": "^0.31.0",
 		"@types/cross-spawn": "^6.0.6",
-		"cross-spawn": "^7.0.3",
+		"cross-spawn": "^7.0.5",
 		"ink": "^4.4.1",
 		"ink-link": "^4.1.0",
 		"meow": "^11.0.0",
