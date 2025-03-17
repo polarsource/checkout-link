@@ -1,6 +1,6 @@
 {
 	"name": "checkout-link",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"license": "Apache-2.0",
 	"bin": "bin/cli.js",
 	"type": "module",
@@ -13,10 +13,7 @@
 		"test": "prettier --check . && xo && ava",
 		"check": "biome check --write ./src"
 	},
-	"files": [
-		"dist",
-		"bin"
-	],
+	"files": ["dist", "bin"],
 	"dependencies": {
 		"@inkjs/ui": "^2.0.0",
 		"@polar-sh/sdk": "^0.31.0",
@@ -54,9 +51,7 @@
 			"ts": "module",
 			"tsx": "module"
 		},
-		"nodeArguments": [
-			"--loader=ts-node/esm"
-		]
+		"nodeArguments": ["--loader=ts-node/esm"]
 	},
 	"xo": {
 		"extends": "xo-react",
