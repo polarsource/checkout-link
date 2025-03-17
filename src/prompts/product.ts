@@ -1,5 +1,5 @@
-import prompts from "prompts";
 import type { ProductCreate } from "@polar-sh/sdk/models/components/productcreate.js";
+import prompts from "prompts";
 
 export const productPrompt = async (): Promise<ProductCreate> => {
 	const productResponse = await prompts([
