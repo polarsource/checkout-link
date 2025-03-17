@@ -3,7 +3,6 @@ import type { CheckoutLink } from "@polar-sh/sdk/models/components/checkoutlink.
 import type { Product } from "@polar-sh/sdk/models/components/product.js";
 import spawn from "cross-spawn";
 import { Box, Text, render } from "ink";
-import open from "open";
 import React from "react";
 
 function pbcopy(data: string) {
@@ -27,6 +26,4 @@ export const successMessage = (
 			</StatusMessage>
 		</Box>,
 	);
-
-	open(checkoutLink.url);
 };
