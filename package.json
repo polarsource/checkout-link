@@ -8,7 +8,7 @@
 		"node": ">=16"
 	},
 	"scripts": {
-		"build": "tsup ./src/cli.tsx --format esm",
+		"build": "tsup",
 		"dev": "tsc --watch",
 		"test": "prettier --check . && xo && ava",
 		"check": "biome check --write ./src"
@@ -19,12 +19,14 @@
 		"@polar-sh/sdk": "^0.31.0",
 		"@types/cross-spawn": "^6.0.6",
 		"cross-spawn": "^7.0.3",
-		"ink": "^4.4.1",
+		"ink": "^5.0.0",
 		"ink-link": "^4.1.0",
 		"meow": "^11.0.0",
 		"mime-types": "^2.1.35",
 		"open": "^10.1.0",
-		"prompts": "^2.4.2",
+		"prompts": "^2.4.2"
+	},
+	"peerDependencies": {
 		"react": "^18.2.0"
 	},
 	"devDependencies": {
@@ -41,6 +43,7 @@
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"ink-testing-library": "^3.0.0",
 		"prettier": "^2.8.7",
+		"react": "^18.2.0",
 		"ts-node": "^10.9.1",
 		"tsup": "^8.3.0",
 		"typescript": "^5.0.3",
